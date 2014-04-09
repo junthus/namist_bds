@@ -6,13 +6,10 @@ exports.restart = function(req, res) {
 		changeDirectory,
 		gitPull,
 		stopServer,
-		startServer,
-		function(err, result){
-			if(err !== null && (typeof err != 'function')){
-				res.json({
-					result:'Fail',
-					error : err
-				})
+		startServer
+	],function(err, result){
+			if(err !== null){
+				res.json({result:'Fail : ' + err.Error})
 			}
 			else{
 				res.json({
@@ -20,55 +17,41 @@ exports.restart = function(req, res) {
 				})
 			}
 		}
-	]);
+	);
 }
 
 function changeDirectory (callback) {
 	process.chdir('../namist');
 
-	console.log('- current working directory' + process.cwd());
+	//console.log('- current working directory' + process.cwd());
 	callback(null);
 }
 
 function gitPull (callback) {
-	console.log('- git pull start ...');
-
 	exec('git pull', function(err, stdout, stderr){
-		//console.log('-- stdout(git) : ' + stdout);
-
-		if(err !== null){
-			console.log('-- ' + err);
-		}
-		else{
-			callback(null);
-		}
+		//console.log(stdout);
+		callback(err);
 	});
 }
 
 function stopServer (callback) {
-	console.log('- forever stop server ...');
-	exec('forever stop server/app.js', function(err, stdout, stderr){
-		//console.log('-- stdout(stop) : ' + stdout);
-
-		if(err !== null){
-			console.log('-- ' + err);
-		}
-		else{
+	exec('forever list | grep server/app.js', function(err, stdout, stderr){
+		if(stdout){
+			stop();
+		}else{
 			callback(null);
 		}
 	});
+
+	function stop (){
+		exec('forever stop server/app.js', function(err, stdout, stderr){
+			callback(err);
+		});
+	}
 }
 
 function startServer (callback) {
-	console.log('forever start server ...');
 	exec('forever start server/app.js', function(err, stdout, stderr){
-		//console.log('-- stdout(start) : ' + stdout);
-
-		if(err !== null){
-			console.log('-- ' + err);
-		}
-		else{
-			callback(null);
-		}
+		callback(err);
 	})
 }
