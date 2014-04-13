@@ -10,15 +10,32 @@ exports.restart = function(req, res) {
 		startServer
 	],function(err, result){
 			if(err !== null){
-				res.json({result:'Fail : ' + err.Error})
+				res.json({result:'fail : ' + err.Error})
 			}
 			else{
 				res.json({
-					result: 'Success'
+					result: 'success'
 				})
 			}
 		}
 	);
+}
+
+exports.stop = function(req, res){
+    async.waterfall([
+        changeDirectory,
+        stopServer
+    ],function(err, result){
+            if(err !== null){
+                res.json({result:'fail : ' + err.Error})
+            }
+            else{
+                res.json({
+                    result: 'success'
+                })
+            }
+        }
+    );
 }
 
 function changeDirectory (callback) {
