@@ -1,13 +1,13 @@
 # namist_bds
 
 ## usage
-__restart__
-1. (forever로 서버가 켜져 있을 경우) forever stop 
-2. git pull 
-3. npm install 
-4. forever start
-__stop__
-1. forever stop
++ __restart__
+    + (forever로 서버가 켜져 있을 경우) forever stop 
+    + git pull 
+    + npm install 
+    + forever start
++ __stop__
+    + forever stop
 
 ## cautions !
 + forever 모듈을 전역으로 설치해야 합니다
